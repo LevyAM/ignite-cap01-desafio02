@@ -31,35 +31,33 @@ function checksCreateTodosUserAvailability(request, response, next) {
   const userTodoLenght = user.todos.length;
 
   if (!userIsPro && userTodoLenght > 9) {
-    return response
-      .status(403)
-      .json({
-        error: "You're using the Free Plan and can create only 10 todos =C",
-      });
+    return response.status(403).json({
+      error: "You're using the Free Plan and can create only 10 todos =C",
+    });
   }
 
   return next();
 }
 
 function checksTodoExists(request, response, next) {
-  const {username} = request.headers;
-  const {id} = request.params;
+  const { username } = request.headers;
+  const { id } = request.params;
 
-  const user = users.find(user => user.username === username);
+  const user = users.find((user) => user.username === username);
 
-  if(!user){
-    return response.status(404).json({error: "User does not exists!"})
+  if (!user) {
+    return response.status(404).json({ error: "User does not exists!" });
   }
 
   const idIsValid = validate(id);
 
-  const todo = user.todos.find(todo => todo.id === id);
-  
-  if(!idIsValid){
-    return response.status(400).json({error: "uuid is invalid!"})
+  const todo = user.todos.find((todo) => todo.id === id);
+
+  if (!idIsValid) {
+    return response.status(400).json({ error: "uuid is invalid!" });
   }
-  if(!todo){
-    return response.status(404).json({error: "Todo does not exists!"})
+  if (!todo) {
+    return response.status(404).json({ error: "Todo does not exists!" });
   }
 
   request.todo = todo;
@@ -69,18 +67,17 @@ function checksTodoExists(request, response, next) {
 }
 
 function findUserById(request, response, next) {
-  const {id} = request.params;
+  const { id } = request.params;
 
-  const user = users.find(user => user.id === id);
+  const user = users.find((user) => user.id === id);
 
-  if(!user){
-    return response.status(404).json({error: "User does not exists!"})
+  if (!user) {
+    return response.status(404).json({ error: "User does not exists!" });
   }
 
   request.user = user;
 
-  return next()
-
+  return next();
 }
 
 app.post("/users", (request, response) => {
